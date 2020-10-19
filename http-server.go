@@ -26,7 +26,7 @@ func main() {
 	}
 
 	httpServer := &http.Server{
-		Addr:    "8080",
+		Addr:    ":8080",
 		Handler: gwmux,
 	}
 	httpServer.ListenAndServe()
