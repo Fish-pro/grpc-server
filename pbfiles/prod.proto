@@ -9,6 +9,12 @@ message ProdRequest {
 message ProdResponse{
     int32 prod_stock=1;
 }
+message QuerySize{
+    int32 size=1; // 页尺寸
+}
+message ProdResponseList{
+  repeated ProdResponse prodres=1;
+}
 
 service ProdService {
     rpc GetProdStock (ProdRequest) returns (ProdResponse){
@@ -16,4 +22,5 @@ service ProdService {
           get: "/v1/prod/{prod_id}"
         };
     }
+    rpc GetProdStocks (QuerySize) returns (ProdResponseList){}
 }

@@ -1,0 +1,1 @@
+cd pbfiles && protoc --go_out=plugins=grpc:../services prod.proto
