@@ -29,6 +29,9 @@ func main() {
 		Addr:    ":8080",
 		Handler: gwmux,
 	}
-	httpServer.ListenAndServe()
+	if err := httpServer.ListenAndServe(); err != nil {
+		log.Println(">>>", err.Error())
+		os.Exit(1)
+	}
 
 }
