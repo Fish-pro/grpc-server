@@ -13,11 +13,23 @@ import (
 
 func main() {
 	gwmux := runtime.NewServeMux()
+	gRpcEndPoint := "localhost:8081"
 	opt := []grpc.DialOption{grpc.WithTransportCredentials(helper.GetClientCred())}
 	err := services.RegisterProdServiceHandlerFromEndpoint(
 		context.Background(),
 		gwmux,
-		"localhost:8081",
+		gRpcEndPoint,
+		opt,
+	)
+	if err != nil {
+		log.Println(">>>", err.Error())
+		os.Exit(1)
+	}
+
+	err = services.RegisterOrderServiceHandlerFromEndpoint(
+		context.Background(),
+		gwmux,
+		gRpcEndPoint,
 		opt,
 	)
 	if err != nil {
