@@ -2,16 +2,27 @@ syntax = "proto3";
 package services;
 option go_package = ".;services";
 import "google/api/annotations.proto";
+import "models.proto";
+
+enum ProdAreas{
+  A=0;
+  B=1;
+  C=2;
+}
 
 message ProdRequest {
-    int32 prod_id = 1;
+    int32 prod_id=1;
+    ProdAreas prod_area=2;
 }
+
 message ProdResponse{
     int32 prod_stock=1;
 }
+
 message QuerySize{
     int32 size=1; // 页尺寸
 }
+
 message ProdResponseList{
   repeated ProdResponse prodres=1;
 }
@@ -22,5 +33,10 @@ service ProdService {
           get: "/v1/prod/{prod_id}"
         };
     }
-    rpc GetProdStocks (QuerySize) returns (ProdResponseList){}
+    rpc GetProdStocks (QuerySize) returns (ProdResponseList){
+       option (google.api.http) = {
+          get: "/v1/prods"
+       };
+    }
+    rpc GetProdInfo (ProdRequest) returns (ProdModel){}
 }
