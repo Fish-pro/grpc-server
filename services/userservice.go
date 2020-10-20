@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"time"
 )
@@ -66,4 +67,29 @@ func (*UserService) GetUserScoreByClientStream(stream UserService_GetUserScoreBy
 		}
 	}
 	return nil
+}
+
+// 双向流式
+func (*UserService) GetUserScoreByTWS(stream UserService_GetUserScoreByTWSServer) error {
+	var score int32 = 101
+	users := make([]*UserInfo, 0)
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		for _, user := range req.Users {
+			user.UserScore = score
+			score++
+			users = append(users, user)
+		}
+		err = stream.Send(&UserScoreResponse{Users: users})
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		users = users[0:0]
+	}
 }
